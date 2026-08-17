@@ -1,0 +1,81 @@
+export let cartMain = JSON.parse(localStorage.getItem('cart-main'));
+    if (!cartMain) {
+        cartMain = [{
+            productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
+            quantity: 2
+        }, {
+            productId: '15b6fc6f-327a-4ec4-896f-486349e85a3d',
+            quantity: 2
+        }];
+        saveToStorage();
+    }
+
+
+function saveToStorage() {
+    localStorage.setItem('cart-main', JSON.stringify(cartMain));
+}
+
+
+export function addToCart(button) {
+    const {productId} = button.dataset;
+    const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
+    const quantity = Number(quantitySelector.value);
+
+    let matchedItem;
+    cartMain.forEach((cartItem) => {
+        if (cartItem.productId === productId) {
+            matchedItem = cartItem;
+        }
+    });
+
+    if (matchedItem) {
+        matchedItem.quantity += quantity;
+    } else {
+        cartMain.push({
+            productId,
+            quantity
+        });
+    }
+    saveToStorage();
+}
+
+
+export function removeFromCart(productId) {
+    const newCartMain = [];
+    cartMain.forEach((cartItem) => {
+        if (cartItem.productId !== productId) {
+            newCartMain.push(cartItem);
+        }
+    });
+    cartMain = newCartMain;
+    saveToStorage();
+}
+
+
+export function calculateCartQuantity() {
+    let cartQuantity = 0;
+    cartMain.forEach((cartItem) => {
+        cartQuantity += cartItem.quantity;
+    });
+    const checkoutQuantity = document.querySelector('.js-checkout-quantity');
+    const cartQuantityElement = document.querySelector('.js-cart-quantity');
+    if (checkoutQuantity) {
+        checkoutQuantity.textContent = `${cartQuantity} items`;
+    }
+    if (cartQuantityElement) {
+        cartQuantityElement.textContent = cartQuantity;
+    }
+    return cartQuantity;
+}
+
+
+export function updateQuantity(productId, newQuantity) {
+    let matchedItem;
+    cartMain.forEach((cartItem) => {
+        if (productId === cartItem.productId) {
+        matchedItem = cartItem;
+        }
+    });
+    matchedItem.quantity = newQuantity;
+    saveToStorage();
+}
