@@ -7,6 +7,9 @@ import { formatCurrency } from './utility/money.js';
 // import * as cartModule from '../data/cart13.js';
 // cartModule.cartx
 // cartModule.addToCart('id');
+// ESM = EcmaScript Module (Ecmasciprt = Javascript)
+
+hello();
 
 let productsxHTML = '';
 

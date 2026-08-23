@@ -1,3 +1,4 @@
+// Named Export
 import { 
     cartMain, 
     removeFromCart, 
@@ -5,6 +6,18 @@ import {
     updateQuantity } from '../data/cart.js';
 import { productsx } from '../data/products.js';
 import { formatCurrency } from './utility/money.js';
+import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
+
+// Default Export
+import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
+
+hello();
+
+const today = dayjs();
+// dayjs().add(amount, unit)
+// dayjs().add(7, 'day')
+const deliveryDate = today.add(7, 'days');
+console.log(deliveryDate.format('dddd, MMMM D'));
 
 let cartSummaryHTML = '';
 
