@@ -13,4 +13,7 @@ export const deliveryOptions = [{
 }];
 
 // Delete the current cart value and save the recent defualt values
-// local.Storage.remoteItem('cart');
+
+// On CONSOLE
+// local.Storage.remoteItem('cart-main');
+// local.Storage.clear()

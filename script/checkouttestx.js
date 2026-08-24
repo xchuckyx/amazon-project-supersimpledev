@@ -13,7 +13,7 @@ import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 // Default Export
 import dayjs from 'https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js';
 
-hello();
+// hello();
 
 // const today = dayjs();
 // dayjs().add(amount, unit)
@@ -45,10 +45,22 @@ cartx.forEach((cartItem) => {
 }); 
 */
 
+const deliveryOptionId = cartItem.deliveryOptionId;
+let deliveryOption;
+deliveryOptions.forEach((option) => {
+    if (option.id === deliveryOptionId) {
+        deliveryOption = option;
+    }
+});
+const today = dayjs();
+const deliveryDate = today.add(
+    deliveryOption.deliveryDays, 'days');
+const dateString = deliveryDate.format('dddd, MMMM D');
+
     cartSummaryHTML += `
     <div class="cart-item-container js-cart-item-container-${matchedProduct.id}">
         <div class="delivery-date">
-            Delivery date: Tuesday, June 21
+            Delivery date: ${dateString}
         </div>
 
         <div class="cart-item-details-grid">
@@ -95,7 +107,7 @@ function deliveryOptionsHTML(matchedProduct, cartItem) {
         const today = dayjs();
         const deliveryDate = today.add(
             deliveryOption.deliveryDays, 'days');
-        const dateString = deliveryDate.format('dddd, MMMM D')
+        const dateString = deliveryDate.format('dddd, MMMM D');
         const priceString = deliveryOption.priceCents 
             === 0
             ? 'FREE'
@@ -150,13 +162,13 @@ document.querySelectorAll('.js-update-link').forEach((updateLink) => {
 });
 
 
-document.querySelectorAll('.js-save-link').forEach((saveLink) => {
+/* document.querySelectorAll('.js-save-link').forEach((saveLink) => {
     saveLink.addEventListener('click', () => {
         const productId = saveLink.dataset.productId; 
         const container = document.querySelector(`.js-cart-item-container-${productId}`);container.classList.remove('is-editing-quantity');
     });
 });
-
+ */
 
 document.querySelectorAll('.js-save-link').forEach((saveLink) => {
     saveLink.addEventListener('click', () => {
@@ -166,7 +178,7 @@ document.querySelectorAll('.js-save-link').forEach((saveLink) => {
         const newQuantity = Number(quantityInput.value);
 
         if (newQuantity <= 0 || newQuantity >= 1000) {
-            alert('Quantity must be at least 0 and less than 1000');
+            alert('Quantity must be greater than 0 and less than 1000');
         return;
         }
 

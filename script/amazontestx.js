@@ -9,7 +9,7 @@ import { formatCurrency } from './utility/money.js';
 // cartModule.addToCart('id');
 // ESM = EcmaScript Module (Ecmasciprt = Javascript)
 
-hello();
+// hello();
 
 let productsxHTML = '';
 
