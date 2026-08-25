@@ -3,7 +3,8 @@ import {
     cartMain, 
     removeFromCart, 
     calculateCartQuantity,
-    updateQuantity } from '../data/cart.js';
+    updateQuantity,
+    updateDeliveryOption } from '../data/cart.js';
 import { productsx } from '../data/products.js';
 import { formatCurrency } from './utility/money.js';
 import { deliveryOptions } from '../data/deliveryoptions.js';
@@ -113,7 +114,10 @@ function deliveryOptionsHTML(matchedProduct, cartItem) {
             ? 'FREE'
             : `$${formatCurrency(deliveryOption.priceCents)} -`
         html += `
-        <div class="delivery-option">
+        <div class="
+            delivery-option js-delivery-option" 
+            data-product-id="${matchedProduct.id}"
+            data-delivery-option-id="${deliveryOption.id}">
             <input type="radio"
                 ${isChecked ? 'checked' : ''}
             class="delivery-option-input"
@@ -188,6 +192,20 @@ document.querySelectorAll('.js-save-link').forEach((saveLink) => {
         updateCartQuantity();
     });
 });
+
+
+document.querySelectorAll('.js-delivery-option').forEach((element) => {
+    element.addEventListener('click', () => {
+        const {productId, deliveryOptionId} = element.dataset;
+        // shorthand for below
+        // const productId = element.dataset.productId;
+        // const deliveryOptionId = element.dataset.deliveryOptionId;
+
+        updateDeliveryOption(productId, deliveryOptionId);
+    });
+});
+
+
 
 
 /* 
