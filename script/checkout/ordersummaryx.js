@@ -5,9 +5,9 @@ import {
     calculateCartQuantity,
     updateQuantity,
     updateDeliveryOption } from '../../data/cart.js';
-import { productsx } from '../../data/products.js';
+import { productsx, getProduct } from '../../data/products.js';
 import { formatCurrency } from './../utility/money.js';
-import { deliveryOptions } from '../../data/deliveryoptions.js';
+import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
 
 import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 
@@ -26,41 +26,31 @@ hello();
 
 export function renderOrderSummary() {
     let cartSummaryHTML = '';
-        cartMain.forEach((cartItem) => {
-        const productId = cartItem.productId;
-        let matchedProduct;
+    cartMain.forEach((cartItem) => {
+    const productId = cartItem.productId;
 
-        productsx.forEach((product) => {
-        if (product.id === productId) {
-            matchedProduct = product;
-        }
-            
-        /* 
-        v1
-        const matchedProduct = productsx.find((product) => {
-            return product.id === productId;
-        v2
-        const matchedProduct = productsx.find(product => product.id === productId);
-            */
-    });
-
-    /* 
-    cartx.forEach((cartItem) => {
-        const productId = cartItem.productId;
-        const matchedProduct = productsx.find((product) => {
-            return product.id === productId;
-        });
-        console.log(matchedProduct);
-    }); 
+    const matchedProduct = getProduct(productId);
+/* 
+v1
+const matchedProduct = productsx.find((product) => {
+    return product.id === productId;
+v2
+const matchedProduct = productsx.find(product => product.id === productId);
     */
 
-    const deliveryOptionId = cartItem.deliveryOptionId;
-    let deliveryOption;
-    deliveryOptions.forEach((option) => {
-        if (option.id === deliveryOptionId) {
-            deliveryOption = option;
-        }
+
+/* 
+cartx.forEach((cartItem) => {
+    const productId = cartItem.productId;
+    const matchedProduct = productsx.find((product) => {
+        return product.id === productId;
     });
+    console.log(matchedProduct);
+}); 
+*/
+
+    const deliveryOptionId = cartItem.deliveryOptionId;
+    const deliveryOption = getDeliveryOption(deliveryOptionId);
 
     const today = dayjs();
     const deliveryDate = today.add(
@@ -150,9 +140,6 @@ export function renderOrderSummary() {
     }
 
 
-
-
-
     // Handle delete functionality
     document.querySelectorAll('.js-delete-link').forEach((deleteLink) => {
         deleteLink.addEventListener('click', () => {
@@ -204,6 +191,7 @@ export function renderOrderSummary() {
             const container = document.querySelector(`.js-cart-item-container-${productId}`);container.classList.remove('is-editing-quantity');
             const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);quantityLabel.innerHTML = newQuantity;
             updateCartQuantity();
+            renderPaymentSummary();
         });
     });
 
