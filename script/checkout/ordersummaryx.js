@@ -8,6 +8,7 @@ import {
 import { productsx, getProduct } from '../../data/products.js';
 import { formatCurrency } from './../utility/money.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
+import { renderPaymentSummary } from './paymentsummaryx.js';
 
 import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 
@@ -148,6 +149,7 @@ cartx.forEach((cartItem) => {
             const cartContainer = document.querySelector(`.js-cart-item-container-${productId}`);
             cartContainer.remove();
             calculateCartQuantity();
+            renderPaymentSummary();
         });
     });
 
@@ -205,6 +207,7 @@ cartx.forEach((cartItem) => {
 
             updateDeliveryOption(productId, deliveryOptionId);
             renderOrderSummary();
+            renderPaymentSummary();
         });
     });
 }
