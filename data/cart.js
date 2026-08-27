@@ -62,11 +62,7 @@ export function calculateCartQuantity() {
     cartMain.forEach((cartItem) => {
         cartQuantity += cartItem.quantity;
     });
-    const checkoutQuantity = document.querySelector('.js-checkout-quantity');
     const cartQuantityElement = document.querySelector('.js-cart-quantity');
-    if (checkoutQuantity) {
-        checkoutQuantity.textContent = `${cartQuantity} items`;
-    }
     if (cartQuantityElement) {
         cartQuantityElement.textContent = cartQuantity;
     }

@@ -146,9 +146,9 @@ cartx.forEach((cartItem) => {
         deleteLink.addEventListener('click', () => {
             const productId = deleteLink.dataset.productId;
             removeFromCart(productId);
-            const cartContainer = document.querySelector(`.js-cart-item-container-${productId}`);
-            cartContainer.remove();
+            
             calculateCartQuantity();
+            renderOrderSummary();
             renderPaymentSummary();
         });
     });
