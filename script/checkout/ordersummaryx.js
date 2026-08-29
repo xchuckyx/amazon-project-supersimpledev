@@ -11,6 +11,7 @@ import { deliveryOptions,
     getDeliveryOption, 
     calculateDeliveryDate } from '../../data/deliveryoptions.js';
 import { renderPaymentSummary } from './paymentsummaryx.js';
+import { renderCheckoutHeader } from './checkoutheaderx.js'
 
 import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 
@@ -179,20 +180,23 @@ cartx.forEach((cartItem) => {
     document.querySelectorAll('.js-save-link').forEach((saveLink) => {
         saveLink.addEventListener('click', () => {
             const productId = saveLink.dataset.productId; 
-            
+            const container = document.querySelector(`.js-cart-item-container-${productId}`);container.classList.remove('is-editing-quantity');
             const quantityInput = document.querySelector(`.js-quantity-input-${productId}`);
             const newQuantity = Number(quantityInput.value);
 
-            if (newQuantity <= 0 || newQuantity >= 1000) {
+            updateQuantity(productId, newQuantity);
+
+            renderCheckoutHeader();
+            renderOrderSummary();
+            renderPaymentSummary();
+
+            /* if (newQuantity <= 0 || newQuantity >= 1000) {
                 alert('Quantity must be greater than 0 and less than 1000');
             return;
-            }
+            } */
 
-            updateQuantity(productId, newQuantity);
-            const container = document.querySelector(`.js-cart-item-container-${productId}`);container.classList.remove('is-editing-quantity');
-            const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);quantityLabel.innerHTML = newQuantity;
-            updateCartQuantity();
-            renderPaymentSummary();
+            // const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`);quantityLabel.innerHTML = newQuantity;
+            // updateCartQuantity();
         });
     });
 

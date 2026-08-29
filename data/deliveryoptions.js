@@ -26,16 +26,35 @@ let deliveryOption;
 }
 
 
-export function calculateDeliveryDate(deliveryOption) {
-    const today = dayjs();
-    const deliveryDate = today.add(
-        deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
-    return dateString;
+function isWeekend(date) {
+    const dayOfWeek = date.format('dddd');
+    return dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday';
 }
 
 
-function skipWeekend(date) {
+export function calculateDeliveryDate(deliveryOption) {
+    let remainingDays = deliveryOption.deliveryDays;
+    let deliveryDate = dayjs();
+
+    while (remainingDays > 0) {
+        deliveryDate = deliveryDate.add(1, 'day');
+
+    if (!isWeekend(deliveryDate)) {
+    remainingDays--;
+    // This is a shortcut for:
+    // remainingDays = remainingDays - 1;
+        }
+    }
+    const dateString = deliveryDate.format('dddd, MMMM D');
+    return dateString;
+    // return deliveryDate.format('dddd, MMMM D');
+}
+
+
+
+
+// From CHATGPT
+/* function skipWeekend(date) {
     const dayOfWeek = date.format('dddd');
     if (dayOfWeek === 'Saturday') {
         date = date.add(2, 'day');
@@ -44,11 +63,10 @@ function skipWeekend(date) {
         date = date.add(1, 'day');
     }
     return date;
-    /* return dayOfWeek === 'Saturday' || dayOfWeek === 'Sunday'; */
 }
     let date = dayjs();
     date = skipWeekend(date);
-    console.log(date.format('dddd, MMMM D'));
+    console.log(date.format('dddd, MMMM D')); */
 
 
 
