@@ -7,7 +7,9 @@ import {
     updateDeliveryOption } from '../../data/cart.js';
 import { productsx, getProduct } from '../../data/products.js';
 import { formatCurrency } from './../utility/money.js';
-import { deliveryOptions, getDeliveryOption } from '../../data/deliveryoptions.js';
+import { deliveryOptions, 
+    getDeliveryOption, 
+    calculateDeliveryDate } from '../../data/deliveryoptions.js';
 import { renderPaymentSummary } from './paymentsummaryx.js';
 
 import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
@@ -109,10 +111,7 @@ cartx.forEach((cartItem) => {
         let html = '';
         deliveryOptions.forEach((deliveryOption) => {
             const isChecked = deliveryOption.id === cartItem.deliveryOptionId;
-            const today = dayjs();
-            const deliveryDate = today.add(
-                deliveryOption.deliveryDays, 'days');
-            const dateString = deliveryDate.format('dddd, MMMM D');
+            const dateString = calculateDeliveryDate(deliveryOption);
             const priceString = deliveryOption.priceCents 
                 === 0
                 ? 'FREE'
