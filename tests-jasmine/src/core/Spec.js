@@ -1,0 +1,392 @@
+getJasmineRequireObj().Spec = function(j$, private$) {
+  'use strict';
+
+  class Spec {
+    #autoCleanClosures;
+    #throwOnExpectationFailure;
+    #timer;
+    #metadata;
+    #executionState;
+
+    constructor(attrs) {
+      this.expectationFactory = attrs.expectationFactory;
+      this.asyncExpectationFactory = attrs.asyncExpectationFactory;
+      this.id = attrs.id;
+      this.filename = attrs.filename;
+      this.parentSuiteId = attrs.parentSuiteId;
+      this.description = attrs.description || '';
+      this.queueableFn = attrs.queueableFn;
+      this.beforeAndAfterFns =
+        attrs.beforeAndAfterFns ||
+        function() {
+          return { befores: [], afters: [] };
+        };
+      this.userContext =
+        attrs.userContext ||
+        function() {
+          return {};
+        };
+      this.getPath = function() {
+        return attrs.getPath ? attrs.getPath(this) : [];
+      };
+
+      this.#autoCleanClosures =
+        attrs.autoCleanClosures === undefined
+          ? true
+          : !!attrs.autoCleanClosures;
+      this.onLateError = attrs.onLateError || function() {};
+      this.#throwOnExpectationFailure = !!attrs.throwOnExpectationFailure;
+      this.#timer = attrs.timer || new j$.Timer();
+
+      this.reset();
+
+      if (!this.queueableFn.fn) {
+        this.exclude();
+      }
+    }
+
+    addExpectationResult(passed, data, isError) {
+      const expectationResult = private$.buildExpectationResult(data);
+
+      if (passed) {
+        this.#executionState.passedExpectations.push(expectationResult);
+      } else {
+        if (this.reportedDone) {
+          this.onLateError(expectationResult);
+        } else {
+          this.#executionState.failedExpectations.push(expectationResult);
+        }
+
+        if (this.#throwOnExpectationFailure && !isError) {
+          throw new private$.errors.ExpectationFailed();
+        }
+      }
+    }
+
+    getSpecProperty(key) {
+      this.#executionState.properties = this.#executionState.properties || {};
+      return this.#executionState.properties[key];
+    }
+
+    setSpecProperty(key, value) {
+      // Key and value will eventually be cloned during reporting. The error
+      // thrown at that point if they aren't cloneable isn't very helpful.
+      // Throw a better one now.
+      if (!private$.isString(key)) {
+        throw new Error('Key must be a string');
+      }
+      private$.util.assertReporterCloneable(value, 'Value');
+
+      this.#executionState.properties = this.#executionState.properties || {};
+      this.#executionState.properties[key] = value;
+    }
+
+    executionStarted() {
+      this.#timer.start();
+    }
+
+    executionFinished(excluded, failSpecWithNoExp) {
+      this.#executionState.dynamicallyExcluded = excluded;
+      this.#executionState.requireExpectations = failSpecWithNoExp;
+
+      if (this.#autoCleanClosures) {
+        this.queueableFn.fn = null;
+      }
+
+      this.#executionState.duration = this.#timer.elapsed();
+
+      if (this.status() !== 'failed') {
+        this.#executionState.debugLogs = null;
+      }
+    }
+
+    hadBeforeAllFailure() {
+      this.addExpectationResult(
+        false,
+        {
+          passed: false,
+          message:
+            'Not run because a beforeAll function failed. The ' +
+            'beforeAll failure will be reported on the suite that ' +
+            'caused it.'
+        },
+        true
+      );
+    }
+
+    reset() {
+      this.#executionState = {
+        failedExpectations: [],
+        passedExpectations: [],
+        deprecationWarnings: [],
+        pendingReason: this.excludeMessage || '',
+        notApplicableReason: '',
+        duration: null,
+        properties: null,
+        debugLogs: null,
+        // TODO: better naming. Don't make 'excluded' mean two things.
+        dynamicallyExcluded: false,
+        requireExpectations: false,
+        markedPending: this.markedExcluding
+      };
+      this.reportedDone = false;
+    }
+
+    startedEvent() {
+      /**
+       * @typedef SpecStartedEvent
+       * @property {String} id - The unique id of this spec.
+       * @property {String} description - The description passed to the {@link it} that created this spec.
+       * @property {String} fullName - The full description including all ancestors of this spec.
+       * @property {String|null} parentSuiteId - The ID of the suite containing this spec, or null if this spec is not in a describe().
+       * @property {String} filename - Deprecated. The name of the file the spec was defined in.
+       * Note: The value may be incorrect if zone.js is installed or
+       * `it`/`fit`/`xit` have been replaced with versions that don't maintain the
+       *  same call stack height as the originals. This property may be removed in
+       *  a future version unless there is enough user interest in keeping it.
+       *  See {@link https://github.com/jasmine/jasmine/issues/2065}.
+       * @since 2.0.0
+       */
+      return this.#commonEventFields();
+    }
+
+    doneEvent() {
+      /**
+       * @typedef SpecDoneEvent
+       * @property {String} id - The unique id of this spec.
+       * @property {String} description - The description passed to the {@link it} that created this spec.
+       * @property {String} fullName - The full description including all ancestors of this spec.
+       * @property {String|null} parentSuiteId - The ID of the suite containing this spec, or null if this spec is not in a describe().
+       * @property {String} filename - The name of the file the spec was defined in.
+       * Note: The value may be incorrect if zone.js is installed or
+       * `it`/`fit`/`xit` have been replaced with versions that don't maintain the
+       *  same call stack height as the originals. You can fix that by setting
+       *  {@link Configuration#extraItStackFrames}.
+       * @property {ExpectationResult[]} failedExpectations - The list of expectations that failed during execution of this spec.
+       * @property {ExpectationResult[]} passedExpectations - The list of expectations that passed during execution of this spec.
+       * @property {ExpectationResult[]} deprecationWarnings - The list of deprecation warnings that occurred during execution this spec.
+       * @property {String} pendingReason - If the spec is {@link pending}, this will be the reason.
+       * @property {String} notApplicableReason - If the spec is {@link notApplicable}, this will be the reason.
+       * @property {String} status - The result of this spec. May be 'passed', 'failed', 'pending', 'notApplicable', or 'excluded'.
+       * @property {number} duration - The time in ms used by the spec execution, including any before/afterEach.
+       * @property {Object} properties - User-supplied properties, if any, that were set using {@link Env#setSpecProperty}
+       * @property {DebugLogEntry[]|null} debugLogs - Messages, if any, that were logged using {@link jasmine.debugLog} during a failing spec.
+       * @since 2.0.0
+       */
+      const event = {
+        ...this.#commonEventFields(),
+        status: this.status()
+      };
+      const toCopy = [
+        'failedExpectations',
+        'passedExpectations',
+        'deprecationWarnings',
+        'pendingReason',
+        'notApplicableReason',
+        'duration',
+        'properties',
+        'debugLogs'
+      ];
+
+      for (const k of toCopy) {
+        event[k] = this.#executionState[k];
+      }
+
+      return event;
+    }
+
+    #commonEventFields() {
+      return {
+        id: this.id,
+        description: this.description,
+        fullName: this.getFullName(),
+        parentSuiteId: this.parentSuiteId,
+        filename: this.filename
+      };
+    }
+
+    handleException(e) {
+      if (e instanceof private$.errors.PendingSpecException) {
+        this.pend(e.message);
+        return;
+      }
+
+      if (e instanceof private$.errors.NotApplicableSpecException) {
+        this.#markNotApplicable(e.message);
+        return;
+      }
+
+      if (e instanceof private$.errors.ExpectationFailed) {
+        return;
+      }
+
+      this.addExpectationResult(
+        false,
+        {
+          matcherName: '',
+          passed: false,
+          error: e
+        },
+        true
+      );
+    }
+
+    pend(message) {
+      this.#executionState.markedPending = true;
+      if (message) {
+        this.#executionState.pendingReason = message;
+      }
+    }
+
+    get markedPending() {
+      return this.#executionState.markedPending;
+    }
+
+    // Like pend(), but pending state will survive reset().
+    // Useful for fit, xit, where pending state remains.
+    exclude(message) {
+      this.markedExcluding = true;
+      if (message) {
+        this.excludeMessage = message;
+      }
+      this.pend(message);
+    }
+
+    // Like pend(), but the intent and reporting are different. A notApplicable
+    // spec is never expected to pass in this environment/configuration/etc.
+    #markNotApplicable(reason) {
+      if (!reason) {
+        // Shouldn't happen, but coerce to something truthy if it did
+        // That way we don't need to track whether the spec was marked
+        // not applicable separately from tracking the reason.
+        reason = 'unspecified reason';
+      }
+
+      this.#executionState.notApplicableReason = reason;
+    }
+
+    status() {
+      if (this.#executionState.dynamicallyExcluded) {
+        return 'excluded';
+      }
+
+      if (this.markedPending) {
+        return 'pending';
+      }
+
+      if (this.#executionState.notApplicableReason) {
+        return 'notApplicable';
+      }
+
+      if (
+        this.#executionState.failedExpectations.length > 0 ||
+        (this.#executionState.requireExpectations &&
+          this.#executionState.failedExpectations.length +
+            this.#executionState.passedExpectations.length ===
+            0)
+      ) {
+        return 'failed';
+      }
+
+      return 'passed';
+    }
+
+    getFullName() {
+      return this.getPath().join(' ');
+    }
+
+    addDeprecationWarning(deprecation) {
+      if (typeof deprecation === 'string') {
+        deprecation = { message: deprecation };
+      }
+      this.#executionState.deprecationWarnings.push(
+        private$.buildExpectationResult(deprecation)
+      );
+    }
+
+    debugLog(msg) {
+      if (!this.#executionState.debugLogs) {
+        this.#executionState.debugLogs = [];
+      }
+
+      /**
+       * @typedef DebugLogEntry
+       * @property {String} message - The message that was passed to {@link jasmine.debugLog}.
+       * @property {number} timestamp - The time when the entry was added, in
+       * milliseconds from the spec's start time
+       */
+      this.#executionState.debugLogs.push({
+        message: msg,
+        timestamp: this.#timer.elapsed()
+      });
+    }
+
+    /**
+     * @interface Spec
+     * @see Configuration#specFilter
+     * @since 2.0.0
+     */
+    get metadata() {
+      // NOTE: Although most of jasmine-core only exposes these metadata objects,
+      // actual Spec instances are still passed to Configuration#specFilter. Until
+      // that is fixed, it's important to make sure that all metadata properties
+      // also exist in compatible form on the underlying Spec.
+      if (!this.#metadata) {
+        this.#metadata = {
+          /**
+           * The unique ID of this spec.
+           * @name Spec#id
+           * @readonly
+           * @type {string}
+           * @since 2.0.0
+           */
+          id: this.id,
+
+          /**
+           * The description passed to the {@link it} that created this spec.
+           * @name Spec#description
+           * @readonly
+           * @type {string}
+           * @since 2.0.0
+           */
+          description: this.description,
+
+          /**
+           * The full description including all ancestors of this spec.
+           * @name Spec#getFullName
+           * @function
+           * @returns {string}
+           * @since 2.0.0
+           */
+          getFullName: this.getFullName.bind(this),
+
+          /**
+           * The full path of the spec, as an array of names.
+           * @name Spec#getPath
+           * @function
+           * @returns {Array.<string>}
+           * @since 5.7.0
+           */
+          getPath: this.getPath.bind(this),
+
+          /**
+           * The name of the file the spec was defined in.
+           * Note: The value may be incorrect if zone.js is installed or
+           * `it`/`fit`/`xit` have been replaced with versions that don't maintain the
+           * same call stack height as the originals. You can fix that by setting
+           * {@link Configuration#extraItStackFrames}.
+           * @name Spec#filename
+           * @readonly
+           * @type {string}
+           * @since 5.13.0
+           */
+          filename: this.filename
+        };
+      }
+
+      return this.#metadata;
+    }
+  }
+
+  return Spec;
+};
