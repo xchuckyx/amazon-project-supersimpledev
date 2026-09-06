@@ -1,4 +1,9 @@
-export let cartMain = JSON.parse(localStorage.getItem('cart-main'));
+export let cartMain;
+
+loadFromStorage();
+
+export function loadFromStorage() {
+    cartMain = JSON.parse(localStorage.getItem('cart-main'));
     if (!cartMain) {
         cartMain = [{
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
@@ -9,11 +14,12 @@ export let cartMain = JSON.parse(localStorage.getItem('cart-main'));
             quantity: 2,
             deliveryOptionId: '2'
         }];
-        saveToStorage();
+        // saveToStorage();
     }
-    console.log(cartMain);
+}
 // Delete the current cart value and save the recent defualt values
 // local.Storage.remoteItem('cart-main');
+
 
 function saveToStorage() {
     localStorage.setItem('cart-main', JSON.stringify(cartMain));
