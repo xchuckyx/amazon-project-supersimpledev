@@ -35,3 +35,5 @@ if (formatCurrency(2000.4) === '20.00') {
 // 2. Edge cases = test with values that are tricky
 
 // Test Suite = Group of related tests
+
+// Integration Test = tests many units/pieces of code working together

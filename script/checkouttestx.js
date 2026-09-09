@@ -5,3 +5,6 @@ import { renderCheckoutHeader } from './checkout/checkoutheaderx.js';
 renderCheckoutHeader();
 renderOrderSummary();
 renderPaymentSummary();
+
+
+

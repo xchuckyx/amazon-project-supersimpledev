@@ -56,56 +56,60 @@ cartx.forEach((cartItem) => {
     const deliveryOptionId = cartItem.deliveryOptionId;
     const deliveryOption = getDeliveryOption(deliveryOptionId);
 
-    const today = dayjs();
+    /* const today = dayjs();
     const deliveryDate = today.add(
         deliveryOption.deliveryDays, 'days');
-    const dateString = deliveryDate.format('dddd, MMMM D');
+    const dateString = deliveryDate.format('dddd, MMMM D'); */
+    const dateString = calculateDeliveryDate(deliveryOption);
 
         cartSummaryHTML += `
-        <div class="cart-item-container js-cart-item-container-${matchedProduct.id}">
-            <div class="delivery-date">
-                Delivery date: ${dateString}
-            </div>
+            <div class="
+                cart-item-container 
+                js-cart-item-container
+                js-cart-item-container-${matchedProduct.id}">
 
-            <div class="cart-item-details-grid">
-                <img class="product-image" src="${matchedProduct.image}">
-                <div class="cart-item-details">
-                    <div class="product-name">
-                        ${matchedProduct.name}
-                    </div>
-                    <div class="product-price">
-                        $${formatCurrency(matchedProduct.priceCents)}
-                    </div>
-                    <div class="product-quantity">
-                        <span>
-                            Quantity: <span class="quantity-label js-quantity-label-${matchedProduct.id}">${cartItem.quantity}</span>
-                        </span>
-                        <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchedProduct.id}">
-                            Update
-                        </span>
-                        <input type="number" class="quantity-input js-quantity-input-${productId}" value="${cartItem.quantity}">
-                        <span class="save-quantity-link link-primary js-save-link" data-product-id="${matchedProduct.id}">
-                            Save
-                        </span>
-                        <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchedProduct.id}">
-                            Delete
-                        </span>
-                    </div>
+                <div class="delivery-date">
+                    Delivery date: ${dateString}
                 </div>
 
-                <div class="delivery-options">
-                    <div class="delivery-options-title">
-                        Choose a delivery option:
+                <div class="cart-item-details-grid">
+                    <img class="product-image" src="${matchedProduct.image}">
+                    <div class="cart-item-details">
+                        <div class="product-name">
+                            ${matchedProduct.name}
+                        </div>
+                        <div class="product-price">
+                            $${formatCurrency(matchedProduct.priceCents)}
+                        </div>
+                        <div class="product-quantity">
+                            <span>
+                                Quantity: <span class="quantity-label js-quantity-label-${matchedProduct.id}">${cartItem.quantity}</span>
+                            </span>
+                            <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchedProduct.id}">
+                                Update
+                            </span>
+                            <input type="number" class="quantity-input js-quantity-input-${productId}" value="${cartItem.quantity}">
+                            <span class="save-quantity-link link-primary js-save-link" data-product-id="${matchedProduct.id}">
+                                Save
+                            </span>
+                            <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchedProduct.id}">
+                                Delete
+                            </span>
+                        </div>
                     </div>
-                    ${deliveryOptionsHTML(matchedProduct, cartItem)}
+
+                    <div class="delivery-options">
+                        <div class="delivery-options-title">
+                            Choose a delivery option:
+                        </div>
+                        ${deliveryOptionsHTML(matchedProduct, cartItem)}
+                    </div>
                 </div>
             </div>
-        </div>
         `;
     });
 
     document.querySelector('.js-order-summary').innerHTML = cartSummaryHTML;
-
 
 
     function deliveryOptionsHTML(matchedProduct, cartItem) {
