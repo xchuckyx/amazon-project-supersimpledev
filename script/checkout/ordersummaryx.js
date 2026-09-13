@@ -81,19 +81,35 @@ cartx.forEach((cartItem) => {
                         <div class="product-price">
                             $${formatCurrency(matchedProduct.priceCents)}
                         </div>
-                        <div class="product-quantity">
+                        <div class="
+                            product-quantity 
+                            js-product-quantity-${matchedProduct.id}">
                             <span>
-                                Quantity: <span class="quantity-label js-quantity-label-${matchedProduct.id}">${cartItem.quantity}</span>
+                                Quantity: <span class="
+                                    quantity-label 
+                                    js-quantity-label-${matchedProduct.id}">${cartItem.quantity}</span>
                             </span>
-                            <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchedProduct.id}">
-                                Update
+                            <span class="
+                                update-quantity-link 
+                                link-primary js-update-link" 
+                                data-product-id="${matchedProduct.id}">Update
                             </span>
-                            <input type="number" class="quantity-input js-quantity-input-${productId}" value="${cartItem.quantity}">
-                            <span class="save-quantity-link link-primary js-save-link" data-product-id="${matchedProduct.id}">
-                                Save
+                            <input type="number" class="
+                                quantity-input 
+                                js-quantity-input-${productId}" 
+                                value="${cartItem.quantity}">
+                            <span class="
+                                save-quantity-link 
+                                link-primary 
+                                js-save-link" 
+                                data-product-id="${matchedProduct.id}">Save
                             </span>
-                            <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchedProduct.id}">
-                                Delete
+                            <span class="
+                                delete-quantity-link 
+                                link-primary 
+                                js-delete-link
+                                js-delete-link-${matchedProduct.id}" 
+                                data-product-id="${matchedProduct.id}">Delete
                             </span>
                         </div>
                     </div>

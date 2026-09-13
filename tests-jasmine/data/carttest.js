@@ -67,6 +67,7 @@ describe('Test Suite: addToCart', () => {
     });
 });
 
+
 // FROM SuperSimplevDev
 /* 
 describe('Test Suite: addToCart', () => {
@@ -90,8 +91,3 @@ describe('Test Suite: addToCart', () => {
         expect(cartMain[0].quantity).toEqual(1);
     });
 }); */
-
-
-// Test Coverage = how much of the code is being tested
-// Flaky Test = test that sometimes passes and sometimes fails
-// Mock = lets us replace a method with a fake version
