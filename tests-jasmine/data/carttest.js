@@ -3,11 +3,13 @@ import {
     cartMain, 
     loadFromStorage } from '../../data/cart.js';
 
-
 // PASSED from CHATGPT
 describe('Test Suite: addToCart', () => {
-    it('Adds an existing product to the cart', () => {
+    beforeEach(() => {
         spyOn(localStorage, 'setItem');
+    });
+
+    it('Adds an existing product to the cart', () => {
         spyOn(localStorage, 'getItem').and.callFake(() => {
             return JSON.stringify([{
                 productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
@@ -40,7 +42,6 @@ describe('Test Suite: addToCart', () => {
 
 
     it('Adds a new product to the cart', () => {
-        spyOn(localStorage, 'setItem');
         spyOn(localStorage, 'getItem').and.callFake(() => {
             return JSON.stringify([]);
         });

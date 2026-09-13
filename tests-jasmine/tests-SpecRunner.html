@@ -34,9 +34,47 @@ Hooks = lets us run some code for each test
 -->
 
 <!-- 
-Hooks in Jasmine
-beforeEach() = runs code before each test
-afterEach() = runs code after each tests
-beforeAll() = runs code before all tests
-afterAll() = runs code after all tests 
+**JASMINE CORE FUNCIIONS
+
+describe() = Groups related tests into a test suite.
+it() = Defines one test/spec.
+expect() = Checks whether a value produces the expected result.
+
+
+**HOOKS
+beforeEach() = runs code before each test.
+afterEach() = runs code after each tests.
+beforeAll() = runs code before all tests.
+afterAll() = runs code after all tests.
+
+
+**Common expect() matchers
+.toBe() = Checks exact equality (===).
+.toEqual() = Checks whether objects/arrays have the same contents.
+.not = Reverses the expectation.
+.toBeTruthy() = Checks if a value is truthy.
+.toBeFalsy() = Checks if a value is falsy.
+.toBeNull() = Checks if value is null.
+.toBeUndefined() = Checks if value is undefined.
+.toBeDefined() = Checks if value is not undefined.
+.toContain() = Checks if an array/string contains something.
+.toBeGreaterThan() = Checks if a number is greater than another.
+.toBeLessThan() = Checks if a number is less than another.
+.toBeGreaterThanOrEqual() = Checks >=.
+.toBeLessThanOrEqual() = Checks <=.
+.toBeCloseTo() = Checks numbers that are approximately equal.
+.toMatch() = Checks whether a string matches a pattern/regular expression.
+.toThrow() = Checks whether a function throws an error.
+
+
+**SPIES
+spyOn() = Replaces a real function with a spy so Jasmine can monitor/control it.
+.and.callFake() = Makes the spy run your own replacement function.
+.and.returnValue() = Makes the spy always return a specific value.
+.and.callThrough() = Spy on the function but still run the original function.
+.and.stub() = Makes the spy do nothing.
+.toHaveBeenCalled() = Checks whether a spy was called.
+.toHaveBeenCalledTimes() = Checks how many times it was called.
+.toHaveBeenCalledWith() = Checks whether it was called with specific arguments.
+
 -->

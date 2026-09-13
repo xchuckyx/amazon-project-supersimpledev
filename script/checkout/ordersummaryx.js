@@ -75,10 +75,14 @@ cartx.forEach((cartItem) => {
                 <div class="cart-item-details-grid">
                     <img class="product-image" src="${matchedProduct.image}">
                     <div class="cart-item-details">
-                        <div class="product-name">
+                        <div class="
+                        product-name
+                        js-product-name-${matchedProduct.id}">
                             ${matchedProduct.name}
                         </div>
-                        <div class="product-price">
+                        <div class="
+                            product-price
+                            js-product-price-${matchedProduct.id}">
                             $${formatCurrency(matchedProduct.priceCents)}
                         </div>
                         <div class="
