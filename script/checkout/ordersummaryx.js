@@ -143,15 +143,22 @@ cartx.forEach((cartItem) => {
                 : `$${formatCurrency(deliveryOption.priceCents)} -`
             html += `
             <div class="
-                delivery-option js-delivery-option" 
+                delivery-option 
+                js-delivery-option
+                js-delivery-option-${matchedProduct.id}-${deliveryOption.id}" 
+
                 data-product-id="${matchedProduct.id}"
                 data-delivery-option-id="${deliveryOption.id}">
+
                 <input type="radio"
                     ${isChecked ? 'checked' : ''}
-                class="delivery-option-input"
-                name="delivery-option-${matchedProduct.id}">
+                    class="
+                        delivery-option-input
+                        js-delivery-option-input-${matchedProduct.id}-${deliveryOption.id}"
+                        name="delivery-option-${matchedProduct.id}">
                 <div>
-                    <div class="delivery-option-date">
+                    <div class="
+                        delivery-option-date">
                         ${dateString} 
                     </div>
                     <div class="delivery-option-price">
