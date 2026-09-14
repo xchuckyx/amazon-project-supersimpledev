@@ -1,3 +1,5 @@
+import { validDeliveryOption } from '../data/deliveryoptions.js';
+
 export let cartMain;
 
 loadFromStorage();
@@ -94,8 +96,14 @@ export function updateDeliveryOption(productId, deliveryOptionId) {
         if (cartItem.productId === productId) {
             matchedItem = cartItem;
         }
+        
     });
-
+        if (!matchedItem) {
+            return;
+        }
+        if (!validDeliveryOption(deliveryOptionId)) {
+            return;
+        }
     matchedItem.deliveryOptionId = deliveryOptionId;
     saveToStorage();
 }
