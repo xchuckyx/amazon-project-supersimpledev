@@ -3,7 +3,7 @@ import {
     cartMain, 
     loadFromStorage,
     removeFromCart,
-    updateDeliveryOption } from '../../data/cart.js';
+    updateDeliveryOption } from '../../data/cartx.js';
 
 // PASSED from CHATGPT
 describe('Test Suite: addToCart', () => {
@@ -165,5 +165,11 @@ describe('Test suite: updateDeliveryOption', () => {
         expect(cartMain[0].quantity).toEqual(1);
         expect(cartMain[0].deliveryOptionId).toEqual('1');
         expect(localStorage.setItem).toHaveBeenCalledTimes(0);
+    });
+});
+
+describe('Test', () => {
+    it('works', () => {
+        expect(true).toBe(true);
     });
 });

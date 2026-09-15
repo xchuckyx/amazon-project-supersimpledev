@@ -83,7 +83,7 @@ cartx.forEach((cartItem) => {
                         <div class="
                             product-price
                             js-product-price-${matchedProduct.id}">
-                            $${formatCurrency(matchedProduct.priceCents)}
+                            ${matchedProduct.getPrice()}
                         </div>
                         <div class="
                             product-quantity 
