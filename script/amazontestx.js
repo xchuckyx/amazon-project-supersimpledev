@@ -1,8 +1,8 @@
 import { 
     addToCart, 
-    calculateCartQuantity } from '../data/cart.js';
+    calculateCartQuantity } from '../data/cartx.js';
 import { productsx } from '../data/products.js';
-import { formatCurrency } from './utility/money.js';
+import { formatCurrency } from './utility/moneyx.js';
 
 // import * as cartModule from '../data/cart13.js';
 // cartModule.cartx
@@ -50,8 +50,10 @@ productsx.forEach((product) => {
                 <img src="images/icons/checkmark.png">
                 Added
             </div>
-            <button class="add-to-cart-button button-primary js-add-to-cart"
-            data-product-id="${product.id}">
+            <button class="
+                add-to-cart-button 
+                button-primary js-add-to-cart"
+                data-product-id="${product.id}">
                 Add to Cart
             </button>
         </div>
@@ -77,6 +79,9 @@ document.querySelectorAll('.js-add-to-cart').forEach((button) => {
         }, 2000);
     });
 });
+
+
+
 
 /* 
 document.querySelectorAll('.js-add-to-cart').forEach((button) => {

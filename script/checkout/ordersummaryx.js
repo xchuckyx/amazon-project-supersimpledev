@@ -4,9 +4,9 @@ import {
     removeFromCart, 
     calculateCartQuantity,
     updateQuantity,
-    updateDeliveryOption } from '../../data/cart.js';
+    updateDeliveryOption } from '../../data/cartx.js';
 import { productsx, getProduct } from '../../data/products.js';
-import { formatCurrency } from './../utility/money.js';
+import { formatCurrency } from './../utility/moneyx.js';
 import { deliveryOptions, 
     getDeliveryOption, 
     calculateDeliveryDate } from '../../data/deliveryoptions.js';

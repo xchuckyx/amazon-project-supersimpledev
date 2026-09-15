@@ -1,4 +1,4 @@
-import { cartMain } from '../../data/cart.js'; 
+import { cartMain } from '../../data/cartx.js'; 
 
 export function renderCheckoutHeader() {
     let cartQuantity = 0;
