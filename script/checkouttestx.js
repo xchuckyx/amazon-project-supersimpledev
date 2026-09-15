@@ -1,7 +1,7 @@
 import { renderOrderSummary } from './checkout/ordersummaryx.js';
 import { renderPaymentSummary } from './checkout/paymentsummaryx.js';
 import { renderCheckoutHeader } from './checkout/checkoutheaderx.js';
-import '../data/cartx-oop.js';
+import '../data/cartx-class.js';
 
 renderCheckoutHeader();
 renderOrderSummary();

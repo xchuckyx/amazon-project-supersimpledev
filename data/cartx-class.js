@@ -2,24 +2,18 @@ import { validDeliveryOption } from '../data/deliveryoptions.js';
 
 // Use PascalCase for things that generates objects.
 // PascalCase = starts every word with a capital.
-function Cart(localStoragekey) {
-    const cartMain = { 
-    cartItems: undefined, 
+// Class = object generator
+class Cart {
+    cartItems;
+    localStoragekey;
 
-    // this 
-    // - gives the outer object carMain. 
-    // - refers to the object that is calling the method.
-
-    // this = cartMain
-    // this.cartItems = cartMain.cartItems
-
-    // cartMain → the object
-    // { } → contains the object's properties and methods
-    // cartItems → a property
-    // loadFromStorage() → a method (a function belonging to the object)
+    constructor(localStoragekey) {
+        this.localStoragekey = localStoragekey;
+        this.loadFromStorage();
+    }
 
     loadFromStorage() {
-        this.cartItems = JSON.parse(localStorage.getItem(localStoragekey));
+        this.cartItems = JSON.parse(localStorage.getItem(this.localStoragekey));
         if (!this.cartItems) {
             this.cartItems = [{
                 productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
@@ -32,13 +26,11 @@ function Cart(localStoragekey) {
             }];
             // saveToStorage();
         }
-    },
-
+    }
 
     saveToStorage() {
-    localStorage.setItem(localStoragekey, JSON.stringify(this.cartItems));
-    },
-
+    localStorage.setItem(this.localStoragekey, JSON.stringify(this.cartItems));
+    }
 
     addToCart(button) {
     const {productId} = button.dataset;
@@ -62,9 +54,7 @@ function Cart(localStoragekey) {
         });
     }
     this.saveToStorage();
-    // adding "this" to access the function inside "saveToStorage()" above
-    },
-
+    }
 
     removeFromCart(productId) {
     const newCartMain = [];
@@ -75,8 +65,7 @@ function Cart(localStoragekey) {
     });
     this.cartItems = newCartMain;
     this.saveToStorage();
-    },
-
+    }
 
     calculateCartQuantity() {
     let cartQuantity = 0;
@@ -88,8 +77,7 @@ function Cart(localStoragekey) {
             cartQuantityElement.textContent = cartQuantity;
         }
         return cartQuantity;
-    },
-
+    }
 
     updateQuantity(productId, newQuantity) {
     let matchedItem;
@@ -103,8 +91,7 @@ function Cart(localStoragekey) {
     });
     matchedItem.quantity = newQuantity;
     this.saveToStorage();
-    },
-
+    }
 
     updateDeliveryOption(productId, deliveryOptionId) {
     let matchedItem;
@@ -123,23 +110,18 @@ function Cart(localStoragekey) {
     matchedItem.deliveryOptionId = deliveryOptionId;
     this.saveToStorage();
     }
-    };
-    return cartMain;
 }
 
-const cartBasic = Cart('cart-oopbasic');
-const cartBusiness = Cart('cart-oopbusiness');
-
-cartBasic.loadFromStorage();
-cartBusiness.loadFromStorage();
+// Instance of a Class
+const cartBasic = new Cart('cart-oopbasic');
+const cartBusiness = new Cart('cart-oopbusiness');
 
 console.log(cartBasic);
 console.log(cartBusiness);
-
+console.log(cartBusiness instanceof Cart);
 
 // Delete the current cart value and save the recent defualt values
 // local.Storage.remoteItem('cart-main');
-
 
 /* 
 Object-Oriented Programming (OOP)
