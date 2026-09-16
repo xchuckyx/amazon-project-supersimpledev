@@ -722,3 +722,42 @@ export const productsx = [{
     }
     return new Product(productDetails);
 });
+
+
+/* 
+// Built-in Classes = classes that are provided by the language 
+// .toLocaleTimeString() = gives the current time
+const date = new Date();
+console.log(date);
+console.log(date.toLocaleTimeString()); 
+*/
+
+/* 
+// undefined as it is outside the object
+console.log(this);
+
+const object2 = {
+    a: 2,
+    b: this.a
+} 
+*/
+
+/* 
+function logThis() {
+    console.log('hey');
+    console.log(this);
+}
+logThis();
+// .call = inside a function, we can change "this" to whatever we want.
+logThis.call('hello');
+
+// arrow functions to not change the value of "this".
+// "this" will have the same value as outside the arrow function
+this
+const object3 = {
+    method: () => {
+        console.log(this);
+    }
+}
+object3.method();
+ */
