@@ -93,6 +93,20 @@ Backend
 
 Request-Response Cycle = 1 request, 1 response.
 
+// it takes time for the request to travel across the Internet.
+// xhr.response will be undefined at first.
+// xhr.send() is a asynchronus code, it does not wait for the line of code to finish.
+
+// Types of requests:
+// GET = get some information from the backend
+// POST
+// PUT
+// DELETE
+
+// URL = Uniform Resource Locator 
+//  - Like an address, but for the Internet
+//  - Helps us locate another computer on the Internet
+
 Status Code
     - starts with 4 or 5 (400, 404, 500) = failed
     - 4 (our problem)
