@@ -1,7 +1,7 @@
 import { 
     addToCart, 
     calculateCartQuantity } from '../data/cartx.js';
-import { productsx, leadProducts } from '../data/products.js';
+import { productsx, loadProducts } from '../data/products.js';
 import { formatCurrency } from './utility/moneyx.js';
 
 // import * as cartModule from '../data/cart13.js';
@@ -11,7 +11,7 @@ import { formatCurrency } from './utility/moneyx.js';
 
 // hello();
 
-leadProducts(renderProductsGrid);
+loadProducts(renderProductsGrid);
 
 function renderProductsGrid() {
     let productsxHTML = '';
