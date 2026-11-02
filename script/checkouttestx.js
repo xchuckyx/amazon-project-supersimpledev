@@ -44,8 +44,23 @@ import { loadCart } from '../data/cartx.js';
     renderPaymentSummary();
 }); */
 
+async function loadPage() {
+    await loadProductsFetch();
 
-Promise.all([
+    const value = await new Promise((resolve) => {
+        loadCart(() => {
+            resolve('value3');
+        });
+    });
+
+    renderCheckoutHeader();
+    renderOrderSummary();
+    renderPaymentSummary();
+
+}
+loadPage();
+
+/* Promise.all([
     loadProductsFetch(),
     new Promise((resolve) => {
         loadCart(() => {
@@ -57,7 +72,7 @@ Promise.all([
     renderCheckoutHeader();
     renderOrderSummary();
     renderPaymentSummary();
-});
+}); */
 
 
 
