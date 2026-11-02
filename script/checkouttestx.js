@@ -1,7 +1,7 @@
 import { renderOrderSummary } from './checkout/ordersummaryx.js';
 import { renderPaymentSummary } from './checkout/paymentsummaryx.js';
 import { renderCheckoutHeader } from './checkout/checkoutheaderx.js';
-import { loadProducts } from '../data/products.js';
+import { loadProducts, loadProductsFetch } from '../data/products.js';
 import { loadCart } from '../data/cartx.js';
 // import '../data/cartx-class.js';
 // import '../data/backend-practicex.js';
@@ -46,11 +46,7 @@ import { loadCart } from '../data/cartx.js';
 
 
 Promise.all([
-    new Promise((resolve) => {
-        loadProducts(() => {
-            resolve('value1');
-        });
-    }),
+    loadProductsFetch(),
     new Promise((resolve) => {
         loadCart(() => {
             resolve();
